@@ -1,0 +1,7 @@
+{
+    
+    "python.defaultInterpreterPath": "${env:HOME}/.virtualenvs/django-chatgpt-clone/bin/python"
+    // "python.analysis.extraPaths": [
+    //     "src"
+    // ]
+}

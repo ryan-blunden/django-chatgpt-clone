@@ -1,82 +1,142 @@
-working again ; ) 
-I am very busy at the moment so I would be very thankful for contributions and PR's
+# Django ChatGPT Clone
 
-## To do
-- [x] Double confirm when deleting conversation
-- [x] remember user preferences
-- [x] theme changer
-- [ ] loading / exporting a conversation
-- [ ] speech output and input (elevenlabs; ex: https://github.com/cogentapps/chat-with-gpt)
-- [ ] load files, ex: https://github.com/mayooear/gpt4-pdf-chatbot-langchain
-- [ ] better documentation
-- [ ] use react / faster backend language ? (newbies may be more confused and discouraged to use it)
- 
-# ChatGPT Clone
-feel free to improve the code / suggest improvements
+Django version of the [chatgpt-clone](https://github.com/xtekky/chatgpt-clone).
 
-<img width="1470" alt="image" src="https://user-images.githubusercontent.com/98614666/232768610-fdeada85-3d21-4cf9-915e-a0ec9f3b7a9f.png">
+[![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
+[![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
+License: GPLv3
 
-## Getting Started
-To get started with this project, you'll need to clone the repository and set up a virtual environment. This will allow you to install the required dependencies without affecting your system-wide Python installation.
+## Requirements
 
-### Prequisites
-Before you can set up a virtual environment, you'll need to have Python installed on your system. You can download Python from the official website: https://www.python.org/downloads/
+- Python 3.9+
+- PostgreSQL
+- Git
+- Make
+- [Doppler CLI](https://docs.doppler.com/docs/install-cli)
+- OpenAPI API Key: [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
 
-### Cloning the Repository
-Run the following command to clone the repository:
-```
-git clone https://github.com/xtekky/chatgpt-clone.git
-```
+## Doppler
 
-### Setting up a Virtual Environment
-To set up a virtual environment, follow these steps:
+TODO
 
-1. Navigate to the root directory of your project.
-```
-cd chatgpt-clone
-```
-2. Run the following command to create a new virtual environment:
-```
-python -m venv venv
-```
-3.  Activate the virtual environment by running the following command:
-```
-source venv/bin/activate
-```
-If you are using fish shell, the command will be slightly different:
-```
-source venv/bin/activate.fish
-```
-If you're on Windows, the command will be slightly different:
-```
-venv\Scripts\activate
-```
-4. Install the required dependencies by running the following command:
-```
-pip install -r requirements.txt
+## Local Development
+
+1. Clone the [ChatGPT Clone Repo](https://github.com/ryan-blunden/django-chatgpt-clone):
+
+```sh
+git clone https://github.com/ryan-blunden/django-chatgpt-clone
 ```
 
-### Configure the Application
-To configure the application, there are a few properties that can be set either via the environment or via config.json.  The environment variable takes priority.
+2. Create the virtual environment (which includes installing dev dependencies):
 
-| Field               | Env Variable    | config.json     | examples                                           |
-|---------------------|-----------------|-----------------|----------------------------------------------------|
-| The OpenAI Api Key  | OPENAI_API_KEY  | openai_key      | sk-...                                             
-| The OpenAI Base URL | OPENAI_API_BASE | openai_api_base | https://api.openai.com <br> http://my-reverse-proxy/ 
-
-Use the Base URL if you need to run your queries through a reverse proxy (like [this one](https://github.com/stulzq/azure-openai-proxy) which will run your queries through Azure's OpenAI endpoints )
-
-
-### Running the Application
-To run the application, make sure the virtual environment is active and run the following command:
-```
-python run.py
+```sh
+make create-virtual-env
 ```
 
-### Docker
-The easiest way to run ChatGPT Clone is by using docker
-```
-docker-compose up
+3. Activate virtual environment:
+
+```sh
+eval $(make virtual-env)
 ```
 
+4. Initialize the database:
+
+```sh
+make init-local-db
+```
+
+5. Perform the required database migrations:
+
+```sh
+make migrations
+```
+
+6. Then run the server:
+
+```sh
+make server
+```
+
+### Optional: Local Development with TLS
+
+To run the development server in TLS mode with a locally trusted certificate using `mkcert`:
+
+1. Add the `chatgptclone.local` host to your hosts file:
+
+```sh
+echo -e "\n127.0.0.1\tchatgptclone.local" | sudo tee -a /etc/hosts > /dev/null
+```
+
+2. Install mkcert by running
+
+```sh
+brew install mkcert
+```
+
+```sh
+mkcert -install
+```
+
+3. Generate the TLS certificate:
+  
+```sh
+mkcert chatgptclone.local
+```
+  
+This will generate two files: `chatgptclone.local.pem` (certificate) and `chatgptclone.local-key.pem` (private key), both signed by the local CA.
+
+4. Then run the server:
+
+```sh
+make server-tls
+```
+
+## Settings
+
+Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings.html).
+
+## Basic Commands
+
+### Setting Up Your Users
+
+- To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
+
+- To create a **superuser account**, use this command:
+
+      $ python manage.py createsuperuser
+
+For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
+
+### Type checks
+
+Running type checks with mypy:
+
+    $ mypy chatgpt_clone
+
+### Test coverage
+
+To run the tests, check your test coverage, and generate an HTML coverage report:
+
+    $ coverage run -m pytest
+    $ coverage html
+    $ open htmlcov/index.html
+
+#### Running tests with pytest
+
+    $ pytest
+
+### Sentry
+
+Sentry is an error logging aggregator service. You can sign up for a free account at <https://sentry.io/signup/?code=cookiecutter> or download and host it yourself.
+The system is set up with reasonable defaults, including 404 logging and integration with the WSGI application.
+
+You must set the DSN url in production.
+
+## Deployment
+
+The following details how to deploy this application.
+
+### Heroku
+
+See detailed [cookiecutter-django Heroku documentation](http://cookiecutter-django.readthedocs.io/en/latest/deployment-on-heroku.html).
