@@ -44,6 +44,15 @@ tasks:
   django:server:
     cmds:
       - doppler run -- ./manage.py runserver_plus
+  
+  docker:build:
+    cmds:
+      - docker image build -t django-chatgpt-clone:dev .
+
+  docker:debug:
+    cmds:
+      - docker image build -t django-chatgpt-clone:local -f Dockerfile.dev .
+      - docker container run --rm -it --env-file <(doppler secrets download --no-file --format docker) django-chatgpt-clone:local
 
   server:
     cmds:

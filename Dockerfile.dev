@@ -1,0 +1,6 @@
+FROM django-chatgpt-clone:dev
+
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r requirements/local.txt
+RUN pip install --no-cache /wheels/*
+
+CMD ["bash"]
