@@ -1,0 +1,14 @@
+name: Deploy to AWS
+on: [workflow_dispatch]
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: AWS Production Deploy
+        run: echo "Deploying to AWS Production"
+      - name: AWS Production Deploy Confirmation
+        run: echo "Deployment successful!"
+
